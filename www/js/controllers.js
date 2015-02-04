@@ -1,16 +1,28 @@
 angular.module('starter.controllers', [])
 // AUTH CONTROLLER
 .controller('AuthController', function($scope, $http, $state, AuthenticationService) {
+  // FALLBACK VARIABLES
+
   $scope.message = "";
 
   $scope.user = {
     username: null,
     password: null
   };
- 
-  // GET DATA FROM SCOPE
+
+  // LOGIN FUNCTION
   $scope.login = function() {
     AuthenticationService.login($scope.user);
+  };
+
+  // REGISTER FUNCTION
+  $scope.register = function() {
+
+  };
+
+  // FORGOT PASSWORD FUNCTION
+  $scope.forgotPassword = function() {
+
   };
  
   // LOG-IN REQUIRED
@@ -23,7 +35,7 @@ angular.module('starter.controllers', [])
     if(data.isAdmin == true) {
       if(data.firstTime == true) {
         console.log('login-confirmed: redirect to admin first time.');
-        $state.go('admin-hello', {}, {reload: true, inherit: false});
+        $state.go('admin-first-time', {}, {reload: true, inherit: false});
       } else {
         console.log('login-confirmed: redirect to admin.');
         $state.go('admin', {}, {reload: true, inherit: false});
@@ -31,7 +43,7 @@ angular.module('starter.controllers', [])
     } else {
       if(data.firstTime == true) {
         console.log('login-confirmed: redirect to user first time.');
-        $state.go('user-hello', {}, {reload: true, inherit: false});
+        $state.go('user-first-time', {}, {reload: true, inherit: false});
       } else {
         console.log('login-confirmed: redirect to user.');
         $state.go('user', {}, {reload: true, inherit: false});
@@ -46,5 +58,11 @@ angular.module('starter.controllers', [])
 })
 // ADMIN CONTROLLER
 .controller('AdminController', function($scope, $http, $state, AuthenticationService) {
+  $scope.slideHasChanged = function(index) {
+
+  };
+})
+// USER CONTROLLER
+.controller('UserController', function($scope, $http, $state, AuthenticationService) {
 
 });

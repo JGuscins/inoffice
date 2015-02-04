@@ -20,3 +20,30 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+
+.slider {
+	width: 100%;
+	height: 100%;
+}
+
+.box {
+	width: 100%;
+	height: 100%;
+
+	h1 {
+		text-align: center;
+		color: #FFF; 
+	}
+
+	&.blue {
+		background: #4387f1;
+	}
+
+	&.yellow {
+		background: #e8ea63;
+	}
+
+	&.pink {
+		background: #eb68eb;
+	}
+}

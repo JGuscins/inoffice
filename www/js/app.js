@@ -42,6 +42,26 @@ angular.module('starter', ['ionic', 'ngMockE2E', 'starter.controllers', 'starter
 
   $httpBackend.whenGET(/.*/).passThrough();
 
+  // BEFORE ROUTE FILTER
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    auth = {
+      authorized: (window.localStorage.getItem("authorized") != null ? window.localStorage.getItem("authorized") : "false"),
+      isAdmin:    (window.localStorage.getItem("isAdmin") != null ? window.localStorage.getItem("isAdmin") : "false"),
+      isUser:     (window.localStorage.getItem("isUser") != null ? window.localStorage.getItem("isUser") : "false"),
+      firstTime:  (window.localStorage.getItem("firstTime") != null ? window.localStorage.getItem("firstTime") : "false")
+    };
+
+    if(toState.data.accessLevel == 1) {
+      if(auth.isAdmin == "false") {
+        event.preventDefault();
+      }
+    } else if(toState.data.accessLevel == 2) {
+      if(auth.isUser == "false") {
+        event.preventDefault();
+      }
+    }
+  });
+
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -58,49 +78,76 @@ angular.module('starter', ['ionic', 'ngMockE2E', 'starter.controllers', 'starter
   .state('auth', {
     url: "/auth",
     templateUrl: "templates/auth/login.html",
-    controller: 'AuthController'
+    controller: 'AuthController',
+    data: {
+      accessLevel: 0
+    }
   })
   .state('auth-register', {
     url: "/auth-register",
     templateUrl: "templates/auth/register.html",
-    controller: 'AuthController'  
+    controller: 'AuthController',
+    data: {
+      accessLevel: 0
+    }  
   })
-  .state('auth-password', {
+  .state('auth-forgot-password', {
     url: "/auth-password",
-    templateUrl: "templates/auth/password.html",
-    controller: 'AuthController'  
+    templateUrl: "templates/auth/forgot-password.html",
+    controller: 'AuthController',
+    data: {
+      accessLevel: 0
+    }  
   })
   // USER ROUTES
   .state('user', {
     url: "/user",
     templateUrl: "templates/user/dashboard.html",
-    controller: 'UserController'
+    controller: 'UserController',
+    data: {
+      accessLevel: 2
+    }
   })
-  .state('user-hello', {
-    url: "/user-hello",
-    templateUrl: "templates/user/hello.html",
-    controller: 'UserController'  
+  .state('user-first-time', {
+    url: "/user-first-time",
+    templateUrl: "templates/user/first-time.html",
+    controller: 'UserController',
+    data: {
+      accessLevel: 2
+    }  
   })
   .state('user-settings', {
     url: "/user-settings",
     templateUrl: "templates/user/settings.html",
-    controller: 'UserController'  
+    controller: 'UserController',
+    data: {
+      accessLevel: 2
+    }  
   })
   // ADMIN ROUTES
   .state('admin', {
     url: "/admin",
     templateUrl: "templates/admin/dashboard.html",
-    controller: 'AdminController'  
+    controller: 'AdminController',
+    data: {
+      accessLevel: 1
+    }
   })
-  .state('admin-hello', {
-    url: "/admin-hello",
-    templateUrl: "templates/admin/hello.html",
-    controller: 'AdminController'   
+  .state('admin-first-time', {
+    url: "/admin-first-time",
+    templateUrl: "templates/admin/first-time.html",
+    controller: 'AdminController',
+    data: {
+      accessLevel: 1
+    }   
   })
   .state('admin-settings', {
     url: "/admin-settings",
     templateUrl: "templates/admin/settings.html",
-    controller: 'AdminController'   
+    controller: 'AdminController',
+    data: {
+      accessLevel: 1
+    }   
   });
 
   // GET AUTH USER VALUES
@@ -118,7 +165,7 @@ angular.module('starter', ['ionic', 'ngMockE2E', 'starter.controllers', 'starter
   } else if(auth.isAdmin == "true") {
     if(auth.firstTime == "true") {
       console.log('init: redirect to admin first time.');
-      $urlRouterProvider.otherwise('/admin-hello');
+      $urlRouterProvider.otherwise('/admin-first-time');
     } else {
       console.log('init: redirect to admin.');
       $urlRouterProvider.otherwise('/admin');
@@ -126,7 +173,7 @@ angular.module('starter', ['ionic', 'ngMockE2E', 'starter.controllers', 'starter
   } else {
     if(auth.firstTime == "true") {
       console.log('init: redirect to user first time.');
-      $urlRouterProvider.otherwise('/user-hello');
+      $urlRouterProvider.otherwise('/user-first-time');
     } else {
       console.log('init: redirect to user.');
       $urlRouterProvider.otherwise('/user');

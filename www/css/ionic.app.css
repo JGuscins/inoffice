@@ -7014,3 +7014,20 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+
+.slider {
+  width: 100%;
+  height: 100%; }
+
+.box {
+  width: 100%;
+  height: 100%; }
+  .box h1 {
+    text-align: center;
+    color: #FFF; }
+  .box.blue {
+    background: #4387f1; }
+  .box.yellow {
+    background: #e8ea63; }
+  .box.pink {
+    background: #eb68eb; }
